@@ -1,0 +1,16 @@
+/* Clases para colores de las columnas de bandas */
+
+.Negro { background-color: black; color: white; }
+.Café { background-color: brown; color: white; }
+.Rojo { background-color: red; color: white; }
+.Naranja { background-color: orange; color: white; }
+.Amarillo { background-color: yellow; color: black; }
+.Verde { background-color: green; color: white; }
+.Azul { background-color: blue; color: white; }
+.Violeta { background-color: blueviolet; color: white; }
+.Gris { background-color: #a0a0a0; color: white; }
+.Blanco { background-color: white; color: black; }
+
+/* Clases para colores de la toletrancia */
+.Plata { background-color: #666666; color: white;}
+.Oro { background-color: #FFD700; color: black;}
