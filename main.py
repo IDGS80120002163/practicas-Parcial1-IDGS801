@@ -126,6 +126,55 @@ def calcularResistencias():
                            valor_maximo=valor_maximo, valor_minimo=valor_minimo,
                            color_b1=color_b1, color_b2=color_b2, color_b3=color_b3,
                            color_tolerancia = color_tolerancia)
+    
+@app.route("/diccionario", methods=["GET", "POST"])
+def diccionario():
+    ingles = '' #Inicializar palabra en inglés
+    espanol = '' #Inicializar palabra en español
+    palabra = '' #Inicializar palabra para buscar
+    traduccion = '' #Inicializar la palabra traducida
+    opciones_idiomas = None
+    alumno_clase = forms.UserForm(request.form) #Inicializamos el objeto de la clase UserForm del archivo forms.py
+    clase_buscar = forms.BuscarForms(request.form)
+    if request.method == 'POST' and alumno_clase.validate():
+        # Verificamos si el usuario buscará o registrará
+        if "btn1" in request.form:
+            ingles = alumno_clase.ingles.data
+            espanol = alumno_clase.espanol.data
+            
+            archivo1 = open('archivo.txt', 'a') #Abrimos el archivo en modo lectura
+            palabras = '\n' + espanol.lower() + ':' + ingles.lower()  #Corregimos la construcción de la palabra en español
+            archivo1.write(palabras)  #Escribimos la palabras en español e inglés en el archivo
+            archivo1.close()  #Cerramos el archivo
+            
+        elif "btn2" in request.form:
+            palabra = clase_buscar.palabra.data
+            opciones_idiomas = clase_buscar.opciones_idiomas.data
+            
+            # Abrimos el archivo en modo de lectura para leer su contenido
+            with open('archivo.txt', 'r') as archivo:
+                # Leemos línea por línea y creamos un diccionario con las traducciones
+                traducciones = {}
+                for linea in archivo:
+                    # Eliminamos los caracteres especiales como saltos de línea y espacios
+                    linea = linea.strip()
+                    # Dividimos la línea en español e inglés usando ':' como separador
+                    partes = linea.split(':')
+                    # Añadimos la palabra en español como clave y la palabra en inglés como valor al diccionario
+                    traducciones[partes[0]] = partes[1]
+                    # Añadimos también la palabra en inglés como clave y la palabra en español como valor
+                    traducciones[partes[1]] = partes[0]
+
+            # Buscamos la palabra en el diccionario invertido
+            if palabra.lower() in traducciones:
+                traduccion = traducciones[palabra.lower()]
+            else:
+                traduccion = "Esta palabra no existe en el diccionario"
+                
+    
+    return render_template("diccionario.html", form = alumno_clase, ingles = ingles, espanol = espanol,
+                           palabra = palabra, opciones_idiomas = opciones_idiomas, buscar_form = clase_buscar,
+                           traduccion = traduccion)
 
 if __name__=="__main__":
     app.run(debug=True)

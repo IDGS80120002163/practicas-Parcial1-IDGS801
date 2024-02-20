@@ -1,0 +1,5 @@
+azul:blue
+verde:green
+rojo:red
+platano:banana
+escribir:write
